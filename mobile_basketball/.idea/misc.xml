@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/mobile_basketball/project_1/app/src/main/res/layout/activity_main.xml" value="0.1796875" />
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/mobile_basketball_git/mobile_basketball/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.11614583333333334" />
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/mobile_basketball_git/mobile_basketball/app/src/main/res/drawable/ic_launcher_background.xml" value="0.18333333333333332" />
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/mobile_basketball_git/mobile_basketball/app/src/main/res/layout-land/activity_main.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/mobile_basketball_git/mobile_basketball/app/src/main/res/layout-land/fragment_game.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/mobile_basketball_git/mobile_basketball/app/src/main/res/layout/activity_main.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/mobile_basketball_git/mobile_basketball/app/src/main/res/layout/activity_save.xml" value="0.22" />
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/mobile_basketball_git/mobile_basketball/app/src/main/res/layout/fragment_game.xml" value="0.13697916666666668" />
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/mobile_basketball_git/mobile_basketball/app/src/main/res/layout/fragment_game_list.xml" value="0.1796875" />
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/mobile_basketball_git/mobile_basketball/app/src/main/res/layout/list_item_game.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/project_1/app/src/main/res/layout-land/activity_main.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/Ryana/AndroidStudioProjects/project_1/app/src/main/res/layout/activity_main.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

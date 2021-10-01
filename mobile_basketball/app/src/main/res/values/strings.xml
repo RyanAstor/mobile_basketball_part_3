@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Basketball</string>
+    <string name="title_A">Team A</string>
+    <string name="score_A">0</string>
+    <string name="three_point_A">+3 Points</string>
+    <string name="two_point_A">+2 Points</string>
+    <string name="one_point_A">FREE THROW</string>
+    <string name="title_B">Team B</string>
+    <string name="score_B">0</string>
+    <string name="three_point_B">+3 Points</string>
+    <string name="two_point_B">+2 Points</string>
+    <string name="one_point_B">FREE THROW</string>
+    <string name="reset_button">RESET</string>
+    <string name="save_button">Save</string>
+    <string name="display_button">Display</string>
+    <string name="save_activity_message">Game Info Saved!</string>
+    <string name="who_won">Who won?</string>
+    <string name="winning_team"> </string>
+    <string name="winning_toast">wins!</string>
+    <string name="tie">It\'s a Tie</string>
+</resources>
