@@ -3,24 +3,28 @@ package com.bignerdranch.android.project_1
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import java.util.*
 import androidx.lifecycle.Observer
+import java.io.File
 
 private const val TAG = "GameFragment"
 private const val REQUEST_CODE_SAVE = 0
+private const val REQUEST_PHOTO = 1
 private const val ARG_GAME_ID = "game_id"
 
 class GameFragment: Fragment() {
@@ -34,6 +38,8 @@ class GameFragment: Fragment() {
     private var callbacks: Callbacks? = null
 
     private lateinit var game: Game
+    private lateinit var photoFile: File
+    private lateinit var photoUri: Uri
     private lateinit var threePointA: Button
     private lateinit var twoPointA: Button
     private lateinit var onePointA: Button
@@ -49,6 +55,10 @@ class GameFragment: Fragment() {
     private lateinit var nameA: String
     private lateinit var nameB: String
     private lateinit var displayButton: Button
+    private lateinit var photoButtonA: ImageButton
+    private lateinit var photoViewA: ImageView
+    private lateinit var photoButtonB: ImageButton
+    private lateinit var photoViewB: ImageView
 
     private val scoreViewModel: ScoreViewModel by lazy {
         ViewModelProviders.of(this).get(ScoreViewModel::class.java)
@@ -106,6 +116,10 @@ class GameFragment: Fragment() {
         nameA = "Team A"
         nameB = "Team B"
         displayButton = view.findViewById(R.id.display_button)
+        photoButtonA = view.findViewById(R.id.camera_A) as ImageButton
+        photoViewA = view.findViewById(R.id.photo_A) as ImageView
+        photoButtonB = view.findViewById(R.id.camera_B) as ImageButton
+        photoViewB = view.findViewById(R.id.photo_B) as ImageView
 
         threePointA.setOnClickListener { view: View ->
             scoreViewModel.updateScore('A', 3, nameA)
@@ -193,6 +207,10 @@ class GameFragment: Fragment() {
                     scoreViewModel.teamAObject.score = game.teamAScore
                     scoreViewModel.teamBObject.name = game.teamBName
                     scoreViewModel.teamBObject.score = game.teamBScore
+                    photoFile = gameDetailViewModel.getPhotoFile(game)
+                    photoUri = FileProvider.getUriForFile(requireActivity(),
+                        "com.bignerdranch.android.project_1.fileprovider",
+                        photoFile)
                     updateUI()
                 }
             })
@@ -247,6 +265,30 @@ class GameFragment: Fragment() {
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart() called")
+
+        photoButtonA.apply {
+            val packageManager: PackageManager = requireActivity().packageManager
+            val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val resolvedActivity: ResolveInfo? =
+                packageManager.resolveActivity(captureImage,
+                    PackageManager.MATCH_DEFAULT_ONLY)
+            if (resolvedActivity == null) {
+                isEnabled = false
+            }
+            setOnClickListener {
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                val cameraActivities: List<ResolveInfo> =
+                    packageManager.queryIntentActivities(captureImage,
+                        PackageManager.MATCH_DEFAULT_ONLY)
+                for (cameraActivity in cameraActivities) {
+                    requireActivity().grantUriPermission(
+                        cameraActivity.activityInfo.packageName,
+                        photoUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                }
+                startActivityForResult(captureImage, REQUEST_PHOTO)
+            }
+        }
     }
 
     private fun updateUI() {
