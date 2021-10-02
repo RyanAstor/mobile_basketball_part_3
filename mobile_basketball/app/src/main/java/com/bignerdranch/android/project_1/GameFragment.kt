@@ -17,9 +17,16 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 import java.util.*
 import androidx.lifecycle.Observer
+import com.bignerdranch.android.project_1.api.OpenWeatherApi
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 
 private const val TAG = "GameFragment"
@@ -80,6 +87,13 @@ class GameFragment: Fragment() {
             val gameId: UUID = id as UUID
             gameDetailViewModel.loadGame(gameId)
         }
+
+        val flickrLiveData: LiveData<String> = OpenWeatherFetcher().fetchWeather()
+        flickrLiveData.observe(
+            this,
+            Observer { responseString ->
+                Log.d(TAG, "Response received: $responseString")
+            })
     }
 
     override fun onAttach(context: Context) {
