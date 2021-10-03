@@ -66,6 +66,8 @@ class GameFragment: Fragment() {
     private lateinit var photoViewA: ImageView
     private lateinit var photoButtonB: ImageButton
     private lateinit var photoViewB: ImageView
+    private lateinit var weatherText: TextView
+
 
     private val scoreViewModel: ScoreViewModel by lazy {
         ViewModelProviders.of(this).get(ScoreViewModel::class.java)
@@ -88,11 +90,12 @@ class GameFragment: Fragment() {
             gameDetailViewModel.loadGame(gameId)
         }
 
-        val flickrLiveData: LiveData<String> = OpenWeatherFetcher().fetchWeather()
+        val flickrLiveData: LiveData<WeatherItem> = OpenWeatherFetcher().fetchWeather()
         flickrLiveData.observe(
             this,
-            Observer { responseString ->
-                Log.d(TAG, "Response received: $responseString")
+            Observer { weatherItem ->
+                Log.d(TAG, "Response received: $weatherItem")
+                weatherText.text = weatherItem.toString()
             })
     }
 
@@ -134,6 +137,7 @@ class GameFragment: Fragment() {
         photoViewA = view.findViewById(R.id.photo_A) as ImageView
         photoButtonB = view.findViewById(R.id.camera_B) as ImageButton
         photoViewB = view.findViewById(R.id.photo_B) as ImageView
+        weatherText = view.findViewById(R.id.weather)
 
         threePointA.setOnClickListener { view: View ->
             scoreViewModel.updateScore('A', 3, nameA)
