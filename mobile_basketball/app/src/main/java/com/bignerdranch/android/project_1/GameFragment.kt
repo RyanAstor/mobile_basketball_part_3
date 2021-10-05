@@ -17,9 +17,16 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 import java.util.*
 import androidx.lifecycle.Observer
+import com.bignerdranch.android.project_1.api.OpenWeatherApi
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 
 private const val TAG = "GameFragment"
@@ -61,6 +68,8 @@ class GameFragment: Fragment() {
     private lateinit var photoViewA: ImageView
     private lateinit var photoButtonB: ImageButton
     private lateinit var photoViewB: ImageView
+    private lateinit var weatherText: TextView
+
 
     private val scoreViewModel: ScoreViewModel by lazy {
         ViewModelProviders.of(this).get(ScoreViewModel::class.java)
@@ -82,6 +91,14 @@ class GameFragment: Fragment() {
             val gameId: UUID = id as UUID
             gameDetailViewModel.loadGame(gameId)
         }
+
+        val flickrLiveData: LiveData<WeatherItem> = OpenWeatherFetcher().fetchWeather()
+        flickrLiveData.observe(
+            this,
+            Observer { weatherItem ->
+                Log.d(TAG, "Response received: $weatherItem")
+                weatherText.text = weatherItem.toString()
+            })
     }
 
     override fun onAttach(context: Context) {
@@ -130,6 +147,7 @@ class GameFragment: Fragment() {
         photoUriB = FileProvider.getUriForFile(requireActivity(),
             "com.bignerdranch.android.project_1.fileprovider",
             photoFileB)
+        weatherText = view.findViewById(R.id.weather)
 
         threePointA.setOnClickListener { view: View ->
             scoreViewModel.updateScore('A', 3, nameA)

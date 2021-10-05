@@ -18,4 +18,5 @@
     <string name="winning_team"> </string>
     <string name="winning_toast">wins!</string>
     <string name="tie">It\'s a Tie</string>
+    <string name="weather">Location: Weather Condition</string>
 </resources>
