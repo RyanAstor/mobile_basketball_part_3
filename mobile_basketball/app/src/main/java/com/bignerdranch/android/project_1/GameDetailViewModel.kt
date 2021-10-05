@@ -28,7 +28,10 @@ class GameDetailViewModel: ViewModel() {
         gameRepository.addGame(game)
     }
 
-    fun getPhotoFile(game: Game): File {
-        return gameRepository.getPhotoFile(game)
+    fun getPhotoFileA(game: Game): File {
+        return gameRepository.getPhotoFileA(game)
+    }
+    fun getPhotoFileB(game: Game): File {
+        return gameRepository.getPhotoFileB(game)
     }
 }

@@ -12,6 +12,8 @@ data class Game(@PrimaryKey val id: UUID = UUID.randomUUID(),
                 var teamBScore: Int = 0,
                 var date: Date = Date()) {
 
-    val photoFileName
-        get() = "IMG_$id.jpg"
+    val photoFileNameA
+        get() = "IMG_A_$id.jpg"
+    val photoFileNameB
+        get() = "IMG_B_$id.jpg"
 }

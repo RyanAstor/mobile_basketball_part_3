@@ -45,11 +45,11 @@
 
                 <EditText
                     android:id="@+id/team_A"
-                    android:layout_width="match_parent"
+                    android:layout_width="110sp"
                     android:layout_height="wrap_content"
-                    android:padding="24dp"
                     android:gravity="center"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
+                    android:padding="24dp"
                     android:text="@string/title_A" />
 
             </LinearLayout>
@@ -118,11 +118,11 @@
 
                 <EditText
                     android:id="@+id/team_B"
-                    android:layout_width="match_parent"
+                    android:layout_width="110sp"
                     android:layout_height="wrap_content"
-                    android:padding="24dp"
                     android:gravity="center"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
+                    android:padding="24dp"
                     android:text="@string/title_B" />
 
             </LinearLayout>
