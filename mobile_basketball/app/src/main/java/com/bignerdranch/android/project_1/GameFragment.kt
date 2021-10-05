@@ -17,7 +17,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 import java.util.*
 import androidx.lifecycle.Observer
@@ -81,14 +80,17 @@ class GameFragment: Fragment() {
         if (id == null) {
             game = Game()
             gameDetailViewModel.addGame(game)
-        }
-        else {
+        } else {
             val gameId: UUID = id as UUID
             gameDetailViewModel.loadGame(gameId)
         }
 
-        val openWeatherLiveData: LiveData<WeatherItem> = OpenWeatherFetcher().fetchWeather()
-        openWeatherLiveData.observe(
+        arguments?.getDouble("lat", 0.0)?.let {
+            OpenWeatherFetcher().fetchWeather(
+                it,
+                arguments?.getDouble("lon", 0.0)!!
+            )
+        }?.observe(
             this,
             Observer { weatherItem ->
                 Log.d(TAG, "Response received: $weatherItem")
@@ -97,6 +99,8 @@ class GameFragment: Fragment() {
                 weatherText.text = responseText
             })
     }
+
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

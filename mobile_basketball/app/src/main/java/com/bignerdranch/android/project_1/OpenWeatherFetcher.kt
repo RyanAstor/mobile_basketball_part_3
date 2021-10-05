@@ -23,9 +23,11 @@ class OpenWeatherFetcher {
         openWeatherApi = retrofit.create(OpenWeatherApi::class.java)
     }
 
-    fun fetchWeather(): LiveData<WeatherItem> {
+    fun fetchWeather(lat: Double, lon: Double): LiveData<WeatherItem> {
         val responseLiveData: MutableLiveData<WeatherItem> = MutableLiveData()
-        val openWeatherRequest: Call<OpenWeatherResponse> = openWeatherApi.fetchWeather()
+        val openWeatherRequest: Call<OpenWeatherResponse> = openWeatherApi.fetchWeather(
+            lat.toString(),lon.toString(),"1dc6c314be1cb96dfc14e8050c6")
+        Log.d(TAG, "$lat, $lon")
         openWeatherRequest.enqueue(object : Callback<OpenWeatherResponse> {
             override fun onFailure(call: Call<OpenWeatherResponse>, t: Throwable) {
                 Log.e(TAG, "Failed to fetch current weather", t)
