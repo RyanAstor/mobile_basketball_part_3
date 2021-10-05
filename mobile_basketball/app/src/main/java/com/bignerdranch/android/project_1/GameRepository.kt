@@ -38,7 +38,9 @@ class GameRepository private constructor(context: Context) {
         }
     }
 
-    fun getPhotoFile(game: Game): File = File(filesDir, game.photoFileName)
+    fun getPhotoFileA(game: Game): File = File(filesDir, game.photoFileNameA)
+    fun getPhotoFileB(game: Game): File = File(filesDir, game.photoFileNameB)
+
 
     companion object {
         private var INSTANCE: GameRepository? = null
