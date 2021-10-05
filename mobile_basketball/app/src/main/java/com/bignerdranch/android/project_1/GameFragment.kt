@@ -21,13 +21,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 import java.util.*
 import androidx.lifecycle.Observer
-import com.bignerdranch.android.project_1.api.OpenWeatherApi
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
+import kotlin.math.round
 
 private const val TAG = "GameFragment"
 private const val REQUEST_CODE_SAVE = 0
@@ -92,12 +87,14 @@ class GameFragment: Fragment() {
             gameDetailViewModel.loadGame(gameId)
         }
 
-        val flickrLiveData: LiveData<WeatherItem> = OpenWeatherFetcher().fetchWeather()
-        flickrLiveData.observe(
+        val openWeatherLiveData: LiveData<WeatherItem> = OpenWeatherFetcher().fetchWeather()
+        openWeatherLiveData.observe(
             this,
             Observer { weatherItem ->
                 Log.d(TAG, "Response received: $weatherItem")
-                weatherText.text = weatherItem.toString()
+                val temF = round((1.8 * (weatherItem.temp - 273) + 32) * 100.0) / 100.0
+                val responseText = weatherItem.city + " : " + temF + " Fahrenheit"
+                weatherText.text = responseText
             })
     }
 

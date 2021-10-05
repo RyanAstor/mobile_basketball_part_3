@@ -5,13 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bignerdranch.android.project_1.api.OpenWeatherApi
 import com.bignerdranch.android.project_1.api.OpenWeatherResponse
-import com.bignerdranch.android.project_1.api.WeatherResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 
 private const val TAG = "OpenWeatherFetcher"
 
@@ -38,8 +36,11 @@ class OpenWeatherFetcher {
             ) {
                 Log.d(TAG, "Response received")
                 val openWeatherResponse: OpenWeatherResponse? = response.body()
-                val weatherResponse: WeatherResponse? = openWeatherResponse?.weather
-                val weatherItem: WeatherItem? = weatherResponse?.weatherItem
+                val weatherItem = openWeatherResponse?.city?.let { city ->
+                    openWeatherResponse.main?.temp?.let { temp ->
+                        WeatherItem(city, temp.toDouble())
+                    }
+                }
                 responseLiveData.value = weatherItem
             }
         })
