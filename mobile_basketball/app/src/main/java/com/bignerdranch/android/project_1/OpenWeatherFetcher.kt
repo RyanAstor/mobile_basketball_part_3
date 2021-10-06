@@ -26,7 +26,7 @@ class OpenWeatherFetcher {
     fun fetchWeather(lat: Double, lon: Double): LiveData<WeatherItem> {
         val responseLiveData: MutableLiveData<WeatherItem> = MutableLiveData()
         val openWeatherRequest: Call<OpenWeatherResponse> = openWeatherApi.fetchWeather(
-            lat.toString(),lon.toString(),"1dc6c314be1cb96dfc14e8050c6")
+            lat,lon,"1dc6c314be1cb96dfc14e8050c6")
         Log.d(TAG, "$lat, $lon")
         openWeatherRequest.enqueue(object : Callback<OpenWeatherResponse> {
             override fun onFailure(call: Call<OpenWeatherResponse>, t: Throwable) {
@@ -37,7 +37,8 @@ class OpenWeatherFetcher {
                 response: Response<OpenWeatherResponse>
             ) {
                 Log.d(TAG, "Response received")
-                val openWeatherResponse: OpenWeatherResponse? = response.body()
+                val openWeatherResponse = response.body()
+                Log.d(TAG, openWeatherResponse.toString())
                 val weatherItem = openWeatherResponse?.city?.let { city ->
                     openWeatherResponse.main?.temp?.let { temp ->
                         WeatherItem(city, temp.toDouble())

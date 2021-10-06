@@ -1,10 +1,12 @@
 package com.bignerdranch.android.project_1
 
+import android.R.attr
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -17,16 +19,24 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 import java.util.*
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import java.io.File
 import kotlin.math.round
+import android.R.attr.data
+import java.io.Serializable
+import kotlin.collections.ArrayList
+
 
 private const val TAG = "GameFragment"
 private const val REQUEST_CODE_SAVE = 0
 private const val REQUEST_PHOTO = 1
 private const val ARG_GAME_ID = "game_id"
+private const val COORDS = "lat"
+
 
 class GameFragment: Fragment() {
 
@@ -64,7 +74,6 @@ class GameFragment: Fragment() {
     private lateinit var photoViewB: ImageView
     private lateinit var weatherText: TextView
 
-
     private val scoreViewModel: ScoreViewModel by lazy {
         ViewModelProviders.of(this).get(ScoreViewModel::class.java)
     }
@@ -85,22 +94,25 @@ class GameFragment: Fragment() {
             gameDetailViewModel.loadGame(gameId)
         }
 
-        arguments?.getDouble("lat", 0.0)?.let {
-            OpenWeatherFetcher().fetchWeather(
-                it,
-                arguments?.getDouble("lon", 0.0)!!
+        if(arguments != null) {
+            val array = arguments?.getSerializable(COORDS) as Array<Double>
+            val lat = array[0]
+            val lon = array[1]
+            Log.d(TAG, "$lat, $lon")
+
+            val openWeatherLiveData: LiveData<WeatherItem> = OpenWeatherFetcher().fetchWeather(lat as Double,
+                lon as Double
             )
-        }?.observe(
-            this,
-            Observer { weatherItem ->
-                Log.d(TAG, "Response received: $weatherItem")
-                val temF = round((1.8 * (weatherItem.temp - 273) + 32) * 100.0) / 100.0
-                val responseText = weatherItem.city + " : " + temF + " Fahrenheit"
-                weatherText.text = responseText
-            })
+            openWeatherLiveData.observe(
+                this,
+                Observer { weatherItem ->
+                    Log.d(TAG, "Response received: $weatherItem")
+                    val temF = round((1.8 * (weatherItem.temp - 273) + 32) * 100.0) / 100.0
+                    val responseText = weatherItem.city + " : " + temF + " Fahrenheit"
+                    weatherText.text = responseText
+                })
+            }
     }
-
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -389,6 +401,16 @@ class GameFragment: Fragment() {
                 arguments = args
             }
         }
+
+        fun newInstance(lat: Double, lon: Double): GameFragment {
+            val args = Bundle().apply {
+                val coords = arrayOf(lat, lon)
+                putSerializable(COORDS, coords as Serializable)
+            }
+            return GameFragment().apply {
+                arguments = args
+            }
+        }
     }
 
     override fun onResume() {
@@ -407,6 +429,7 @@ class GameFragment: Fragment() {
         Toast.makeText(activity, messageResId, Toast.LENGTH_SHORT).show()
         scoreViewModel.foundWinner = false
     }
+
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause() called")
